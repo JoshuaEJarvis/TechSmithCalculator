@@ -11,9 +11,7 @@ import SwiftUI
 struct CalculatorView: View {
     
     // CalculatorController object that runs the logic of the calculator
-    let controller = CalculatorController()
-    
-    private var negative = true
+    @ObservedObject private var controller = CalculatorController()
     
     // number variable that filters out all chars except numbers
     @ObservedObject private var number = NumberFilter()
@@ -22,11 +20,20 @@ struct CalculatorView: View {
     var body: some View {
         VStack{
             // Number input text field
-            TextField("0", text: $number.value)
-                .foregroundColor(Color.white)
-                .font(.custom("", size: 60))
-                .frame(height: 60)
-                .background(Color(hue: 1.0, saturation: 0.0, brightness: 0.089))
+            HStack{
+                if controller.negative {
+                    Text("-")
+                        .foregroundColor(Color.white)
+                        .font(.custom("", size: 60))
+                        .frame(height: 60)
+                        .background(Color(hue: 1.0, saturation: 0.0, brightness: 0.089))
+                }
+                TextField("0", text: $number.value)
+                    .foregroundColor(Color.white)
+                    .font(.custom("", size: 60))
+                    .frame(height: 60)
+                    .background(Color(hue: 1.0, saturation: 0.0, brightness: 0.089))
+            }
             HStack{
                 Button(action: {
                     print("All Clear")
@@ -72,6 +79,7 @@ struct CalculatorView: View {
             HStack{
                 Button(action: {
                     print("Negative")
+                    controller.negativeTap()
                 }) {
                     Text("+/-")
                         .frame(width: 60, height: 60)
@@ -129,6 +137,7 @@ struct CalculatorView: View {
 
 // Class to filter text input to only use numbers
 // returns number only text
+// Code retrieved from tutorial https://programmingwithswift.com/numbers-only-textfield-with-swiftui/
 class NumberFilter: ObservableObject {
     // Published wrapper allows value to be automatically updated using the number filter
     @Published var value = "" {
@@ -145,9 +154,9 @@ class NumberFilter: ObservableObject {
 }
 
 // CalculatorController which holds the logic of the calculator
-class CalculatorController {
+class CalculatorController: ObservableObject {
     // Variable to track negative button
-    private var negative = false
+    @Published var negative = false
     private var currentNumber = 0
     private var previousNumber = 0
     // Variable which holds the current operation to be executed
@@ -208,6 +217,9 @@ class CalculatorController {
         default:
             print("No math")
         }
+        if self.currentNumber < 0{
+            self.negative = true
+        }
     }
     
     // Getter for currentNumber
@@ -224,6 +236,10 @@ class CalculatorController {
     func updateCurrentNumber(num: Int) {
         self.previousNumber = self.currentNumber
         self.currentNumber = num
+        if self.negative{
+            self.currentNumber *= -1
+            self.negative = false
+        }
         print("Current Number: " + String(self.currentNumber))
         print("Previous Number: " + String(self.previousNumber))
     }
@@ -237,11 +253,6 @@ class CalculatorController {
     
     // Negative Tap: Switches current number between negative and positive
     func negativeTap() {
-        negative = !negative
-    }
-    
-    // Getter for negative variable
-    func isNegative() -> Bool {
-        return negative
+        self.negative = !self.negative
     }
 }
