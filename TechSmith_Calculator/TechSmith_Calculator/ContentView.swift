@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    private var negative = true
+    // Variable to track negative button
+    private var negative = false
     // number variable that filters out all chars except numbers
     @ObservedObject private var number = NumberFilter()
     
@@ -21,57 +22,92 @@ struct ContentView: View {
                 .frame(height: 60)
                 .background(Color(hue: 1.0, saturation: 0.0, brightness: 0.089))
             HStack{
-                Text("AC")
-                    .frame(width: 60, height: 60)
-                    .font(.title)
-                    .background(Color.gray)
-                    .foregroundColor(.black)
-                    .clipShape(Circle())
+                Button(action: {
+                    print("All Clear")
+                }) {
+                    Text("AC")
+                        .frame(width: 60, height: 60)
+                        .font(.title)
+                        .background(Color.gray)
+                        .foregroundColor(.white)
+                        .clipShape(Circle())
+                }
+                    .buttonStyle(PlainButtonStyle())
                     .padding(10)
-                Text("+")
-                    .frame(width: 60, height: 60)
-                    .font(.title)
-                    .background(Color.orange)
-                    .foregroundColor(.white)
-                    .clipShape(Circle())
+                Button(action: {
+                    print("Add")
+                }) {
+                    Text("+")
+                        .frame(width: 60, height: 60)
+                        .font(.title)
+                        .background(Color.orange)
+                        .foregroundColor(.white)
+                        .clipShape(Circle())
+                }
+                    .buttonStyle(PlainButtonStyle())
                     .padding(10)
-                Text("-")
-                    .frame(width: 60, height: 60)
-                    .font(.title)
-                    .background(Color.orange)
-                    .foregroundColor(.white)
-                    .clipShape(Circle())
+                Button(action: {
+                    print("Subtract")
+                }) {
+                    Text("-")
+                        .frame(width: 60, height: 60)
+                        .font(.title)
+                        .background(Color.orange)
+                        .foregroundColor(.white)
+                        .clipShape(Circle())
+                }
+                    .buttonStyle(PlainButtonStyle())
                     .padding(10)
             }
             HStack{
-                Text("=")
-                    .frame(width: 60, height: 60)
-                    .font(.title)
-                    .background(Color.orange)
-                    .foregroundColor(.white)
-                    .clipShape(Circle())
+                Button(action: {
+                    print("Equals")
+                }) {
+                    Text("=")
+                        .frame(width: 60, height: 60)
+                        .font(.title)
+                        .background(Color.orange)
+                        .foregroundColor(.white)
+                        .clipShape(Circle())
+                }
+                    .buttonStyle(PlainButtonStyle())
                     .padding(10)
-                Text("x")
-                    .frame(width: 60, height: 60)
-                    .font(.title)
-                    .background(Color.orange)
-                    .foregroundColor(.white)
-                    .clipShape(Circle())
+                Button(action: {
+                    print("Multiply")
+                }) {
+                    Text("x")
+                        .frame(width: 60, height: 60)
+                        .font(.title)
+                        .background(Color.orange)
+                        .foregroundColor(.white)
+                        .clipShape(Circle())
+                }
+                    .buttonStyle(PlainButtonStyle())
                     .padding(10)
-                Text("÷")
-                    .frame(width: 60, height: 60)
-                    .font(.title)
-                    .background(Color.orange)
-                    .foregroundColor(.white)
-                    .clipShape(Circle())
+                Button(action: {
+                    print("Divide")
+                }) {
+                    Text("÷")
+                        .frame(width: 60, height: 60)
+                        .font(.title)
+                        .background(Color.orange)
+                        .foregroundColor(.white)
+                        .clipShape(Circle())
+                }
+                    .buttonStyle(PlainButtonStyle())
                     .padding(10)
             }
-            Text("+/-")
-                .frame(width: 60, height: 60)
-                .font(.title)
-                .background(Color.orange)
-                .foregroundColor(.white)
-                .clipShape(Circle())
+            Button(action: {
+                print("Negative")
+            }) {
+                Text("+/-")
+                    .frame(width: 60, height: 60)
+                    .font(.title)
+                    .background(Color.gray)
+                    .foregroundColor(.white)
+                    .clipShape(Circle())
+            }
+                .buttonStyle(PlainButtonStyle())
                 .padding(10)
         }
         .background(Color(hue: 1.0, saturation: 0.0, brightness: 0.089))
@@ -93,7 +129,7 @@ class NumberFilter: ObservableObject {
         didSet {
             // create filter of text with numbers only, goes through each char and checks if it is a number
             let filtered = value.filter { $0.isNumber }
-            // Check if value is a number
+            // Check if value is the same as filtered
             if value != filtered {
                 value = filtered
             }
