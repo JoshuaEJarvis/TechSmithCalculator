@@ -39,6 +39,7 @@ struct CalculatorView: View {
                     print("All Clear")
                     controller.allClear()
                     number.value = ""
+                    controller.negative = false
                 }) {
                     Text("AC")
                         .frame(width: 60, height: 60)
